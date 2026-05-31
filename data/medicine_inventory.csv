@@ -1,0 +1,26 @@
+medicine_id,medicine_name,bilingual_name,category,current_stock,min_required_stock,expiry_date,is_critical,unit_price,supplier_name,seasonal_demand_pattern
+MED001,Paracetamol 650mg,पॅरासिटामॉल ६५०mg,Analgesic (Fever & Pain),169,128,2027-06-05,No,2.5,Maurya Pharma Distributors,Monsoon Spike
+MED002,Cetirizine 10mg,सेटिरिझिन १०mg,Antihistamine (Allergies),30,80,2028-02-16,No,3.0,Sahyadri Medical Logistics,Monsoon Spike
+MED003,Amoxicillin 500mg,अमॉक्सिसिलिन ५००mg,Antibiotic (Infections),146,96,2027-12-25,No,8.5,Bharat Biotech Supply,Monsoon Spike
+MED004,Insulin Glargine 100IU,इन्सुलिन ग्लार्जिन १००IU,Antidiabetic (Critical),12,40,2027-09-30,Yes,145.0,Eli Lilly India Ltd.,Constant
+MED005,Salbutamol Inhaler,साल्ब्युटामॉल इनहेलर,Respiratory (Asthma),16,32,2027-08-23,Yes,95.0,Cipla Pharmaceuticals,Winter Spike
+MED006,Phenytoin 100mg,फेनिटॉइन १००mg,Anticonvulsant (Epilepsy),64,24,2027-08-08,Yes,15.0,Abbott India Ltd.,Constant
+MED007,ORS (Oral Rehydration),ओ.आर.एस (जलसंजीवनी),Rehydration (Dehydration),450,176,2028-07-16,No,4.5,FDC India Distributors,Summer Spike
+MED008,Cough Syrup 100ml,खोखल्याचे औषध १००ml,Respiratory (Cough/Cold),71,72,2027-06-10,No,45.0,Dabur Medical Agency,Winter Spike
+MED009,Pantoprazole 40mg,पॅन्टोप्राझोल ४०mg,Antacid (Acidity),152,120,2026-06-13,No,6.0,Sun Pharma Industries,Summer Spike
+MED010,Metformin 500mg,मेटफॉर्मिन ५००mg,Antidiabetic,237,144,2028-01-04,No,3.5,Lupin India Ltd.,Constant
+MED011,Amlodipine 5mg,अॅम्लोडिपिन ५mg,Cardiovascular (BP),227,112,2027-06-07,No,2.0,Torrent Pharmaceuticals,Constant
+MED012,Azithromycin 500mg,अझिथ्रोमायसिन ५००mg,Antibiotic (Infections),113,48,2027-11-30,No,22.0,Alkem Laboratories Ltd.,Winter Spike
+MED013,Ibuprofen 400mg,आयबूप्रोफेन ४००mg,Analgesic (Fever & Pain),195,64,2028-07-13,No,1.8,Maurya Pharma Distributors,Monsoon Spike
+MED014,Zinc Tablets 20mg,झिंक गोळ्या २०mg,Supplement (Diarrhea),126,80,2026-05-20,No,4.0,Sahyadri Medical Logistics,Monsoon Spike
+MED015,Multivitamin Complex,मल्टीव्हिटॅमिन कॉम्प्लेक्स,Supplement (Nutrition),198,96,2028-02-19,No,5.5,Himalaya Wellness Corp.,Constant
+MED016,Folic Acid 5mg,फॉलिक ॲसिड ५mg,Supplement (Nutrition),108,120,2027-10-21,No,1.2,Bharat Biotech Supply,Constant
+MED017,Atorvastatin 10mg,अ‍ॅटोर्वास्टेटिन १०mg,Cardiovascular (Cholesterol),255,88,2028-07-16,No,7.8,Sun Pharma Industries,Constant
+MED018,Levocetirizine 5mg,लेव्होसेटिरिझिन ५mg,Antihistamine (Allergies),143,64,2028-02-19,No,2.8,Cipla Pharmaceuticals,Winter Spike
+MED019,Ranitidine 150mg,रॅानिटिडिन १५०mg,Antacid (Acidity),191,128,2027-12-17,No,1.5,Abbott India Ltd.,Constant
+MED020,Diclofenac Gel 30g,डायक्लोफेनॅक जेल ३०g,Analgesic (Fever & Pain),139,48,2028-04-19,No,35.0,Maurya Pharma Distributors,Constant
+MED021,ORS (Orange Flavor),ओ.आर.एस (संत्री स्वाद),Rehydration (Dehydration),157,120,2027-08-13,No,5.0,FDC India Distributors,Summer Spike
+MED022,Dolo 650mg,डोलो ६५०mg,Analgesic (Fever & Pain),334,160,2027-08-18,No,2.0,Micro Labs Ltd.,Monsoon Spike
+MED023,Erythromycin 250mg,एरिथ्रोमायसिन २५०mg,Antibiotic (Infections),94,56,2028-04-27,No,11.5,Alkem Laboratories Ltd.,Monsoon Spike
+MED024,Montelukast 10mg,मॉन्टील्यूकास्ट १०mg,Respiratory (Asthma),119,48,2028-02-05,Yes,14.5,Cipla Pharmaceuticals,Winter Spike
+MED025,Carbamazepine 200mg,कार्बामाझेपिन २००mg,Anticonvulsant (Epilepsy),14,32,2027-06-24,Yes,8.0,Abbott India Ltd.,Constant
