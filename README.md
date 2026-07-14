@@ -1,140 +1,183 @@
-# Smart Pharmacy Inventory Prediction System 🩺🔮
-### *An Advanced, Explainable Healthcare AI Dashboard for Rural Clinics and Small Pharmacies*
+# Smart Pharmacy Inventory Predictor & Clinical AI 🩺🔮
+### *Production-Grade AI-Powered Demand Forecasting & Clinical Assistant for Rural Clinics and PHCs*
 
 ---
 
-## 🌟 Project Overview
-In rural India, Primary Health Centres (PHCs) and local pharmacies operate under tight budgets. They frequently face severe stock-outs of life-saving, critical medicines (like Insulin, Asthma Inhalers, or Epilepsy drugs) due to unexpected seasonal illness surges (like dengue fevers during the monsoon or respiratory cases in winter). Conversely, over-stocking other medicines results in capital loss when formulations expire on shelves unnoticed.
+## 🌟 Platform Overview
+This project is a production-ready, full-stack **Smart Pharmacy Inventory Prediction System** designed for Indian Primary Health Centres (PHCs), rural clinics, and small pharmacies. 
 
-This **Smart Pharmacy Inventory Prediction System** is a fully functional, complete, and production-ready Python & Streamlit application. It implements explainable machine learning models (**Linear Regression** and **Random Forest Regressor**) to forecast 30-day daily medicine consumption, predict exact stock-out dates, issue color-coded risk alerts, and generate automated restocking orders with estimated billing.
-
-The application contains **7 fully structured pages** in a highly aesthetic, clean, and modern healthcare-themed UI, supporting **Bilingual labels (English + Marathi)** for rural clinic accessibility.
+It is a decoupled, secure, and containerized application featuring a **FastAPI backend** (using SQLAlchemy ORM, Alembic migrations, and repository pattern), a **Streamlit frontend client** (with interactive Plotly charts, dark mode, and an AI assistant), a relational database (PostgreSQL in production/Docker, SQLite for local runs), and advanced ML forecasting (Linear Regression, Random Forest, XGBoost) with Explainable AI (SHAP) and a **Google Gemini AI chatbot assistant**.
 
 ---
 
-## 📁 Project Folder Structure
-The workspace is organized cleanly as follows:
-```text
-EMBS internship/
-├── data/
-│   ├── medicine_inventory.csv       # 25 common medicine formulations with metadata
-│   └── daily_usage_history.csv      # 365 days of chronological sales logs (9,150 entries)
-├── src/
-│   ├── __init__.py
-│   ├── data_generator.py            # Generates realistic synthetic clinical databases
-│   ├── ml_model.py                  # ML Engine (LR & Random Forest) for forecasts & stock-outs
-│   └── app.py                       # Main 7-page interactive dashboard web application
-├── requirements.txt                 # Project dependencies list
-├── README.md                        # Complete user & developer setup guide (This file)
-└── PRESENTATION.md                  # PowerPoint outline, speaker notes, and Viva Q&A prep sheets
+## 🏗️ Architecture & Data Flow
+
+```mermaid
+graph TD
+    subgraph Frontend [Streamlit Client UI]
+        UI[Streamlit Application]
+        Charts[Plotly Dashboard]
+        Chat[Gemini Chat Interface]
+    end
+
+    subgraph Backend [FastAPI Server]
+        API[FastAPI Gateway]
+        Auth[JWT & RBAC Security]
+        ML[AutoML Forecast Engine]
+        LLM[Gemini Assistant Service]
+        Alembic[Alembic Migrations]
+    end
+
+    subgraph Database [Storage & Caching]
+        SQLite[(Local SQLite DB)]
+        PGSQL[(Production PostgreSQL)]
+        Redis[(Redis Cache)]
+    end
+
+    UI -->|REST requests with JWT| API
+    API --> Auth
+    API --> ML
+    API --> LLM
+    API --> SQLite
+    API --> PGSQL
+    API --> Redis
 ```
 
 ---
 
-## 📑 Streamlit Dashboard Page Breakdown
+## 📁 Directory Layout
+```text
+EMBS internship/
+├── backend/
+│   ├── alembic/             # Alembic migration scripts and history
+│   ├── app/
+│   │   ├── config/          # Pydantic Settings loaders (with absolute SQLite pathing)
+│   │   ├── database/        # DB sessions & database seeders
+│   │   ├── models/          # 18 relational SQLAlchemy database models
+│   │   ├── schemas/         # Pydantic validation schemas (optional tenant inputs)
+│   │   ├── repositories/    # Generic and model-specific repositories (deferred commits support)
+│   │   ├── services/        # Business logic (Auth, ML, Gemini, PDF reports, Alerts)
+│   │   ├── routers/         # FastAPI endpoint route definitions
+│   │   └── main.py          # ASGI application entrypoint & startup migrations
+│   ├── tests/               # Pytest API unit test suite (9 test cases passing)
+│   └── Dockerfile           # Backend containerization dockerfile
+├── frontend/
+│   └── streamlit_app.py     # Streamlit frontend client (calls FastAPI APIs)
+├── requirements.txt         # Project dependencies (FastAPI, Streamlit, ML, Gemini, PostgreSQL driver)
+├── docker-compose.yml       # Connects Postgres, Redis, and FastAPI app
+├── .env.example             # Configuration variables template
+└── README.md                # General documentation (This file)
+```
 
-The dashboard is structured into **7 interactive pages** accessible from the clean sidebar menu:
+---
 
-### 1. 🏠 Home Dashboard
-* **KPI Metrics Panel:** High-impact cards summarizing Total Formulations, Critical Life-saving Drugs, Low Stock Warnings, and Urgent Out-of-Stock alerts.
-* **Interactive Chart:** A Plotly bar chart comparing every medicine's current shelf stock side-by-side with its safety reorder point.
-* **Instruction Cards:** Quick guidelines for clinic operators on handling Red, Yellow, and Green alerts.
+## ⚡ Key Upgraded Features
 
-### 2. 📦 Inventory Management
-* **Active Database Table:** Displays all 25 medicines with search and category filters.
-* **Add New Medicine Form:** Full form to append a new formulation to the database.
-* **Update Stock Level Form:** Easily change stock quantities of shelf stock.
-* **Delete Medicine Form:** Allows permanent removal of a medicine from the database with double-check confirmation boxes.
-* *All changes persist instantly to `data/medicine_inventory.csv`.*
+### 1. Robust Clean Backend Architecture
+*   **FastAPI Engine**: Employs async FastAPI serving structured REST APIs under the `/api/v1` namespace.
+*   **Clean Layering**: Logic is separated strictly into routers (API routes), schemas (validation), models (SQLAlchemy), repositories (DB CRUD), and services (business logic).
+*   **Security & RBAC**: Implements secure JWT access tokens and long-lived refresh tokens. Cryptographic hashing via `bcrypt` handles password security. Role-Based Access Control (RBAC) regulates operations for five distinct roles:
+    *   `Administrator` (Group level configuration)
+    *   `Branch Manager` (Registers staff and logs stock shipments)
+    *   `Pharmacist` (Records sales and reviews predictions)
+    *   `Supplier` (Checks pending purchase orders)
+    *   `Government Officer` (Monitors regional outbreaks)
 
-### 3. 🔮 Prediction Analytics (AI Forecasts)
-* **ML Model Selector:** Instantly toggle between **Linear Regression** and **Random Forest Regressor** to compare forecasting.
-* **Depletion Panel:** Displays the estimated Stock-Out Date, remaining days of stock, and active risk level.
-* **Interactive Plotly Graph:** Projects the last 60 days of historical sales alongside a 30-day daily demand forecast represented as a dashed orange line.
-* **Viva Explainer:** Dedicated explainability card helping students explain the mathematical logic during project reviews.
+### 2. Redesigned Relational Schema & Alembic Migrations
+*   **18 Tables**: `User`, `Tenant`, `Branch`, `Supplier`, `Medicine`, `Category`, `Inventory` (Batch-aware stock), `PurchaseOrder`, `PurchaseOrderItem`, `Sale`, `SaleItem`, `DemandHistory`, `Prediction`, `Alert`, `Notification`, `AuditLog`, `ExpiryTracking`, `DiseaseTrend`, `UserSession`, `ForecastJob`.
+*   **Alembic Migrations**: Fully integrated database version control. Safe, programmatic migration upgrades are executed automatically on server startup. Development fallback automatically resets SQLite databases in case of schema validation failure.
 
-### 4. ⚠️ Alerts & Risks
-* **Red Stockout Alarms:** Formulations likely to deplete in $\le 7$ days.
-* **Yellow Warnings:** Formulations with 8–15 days of stock remaining.
-* **Critical Drug Watchdog:** Dedicated panel highlighting life-saving medications (Insulin, Asthma inhalers, Epilepsy drugs) to ensure pharmacists never overlook them.
-* **Expiry Monitoring:** Dedicated tables separating completely **Expired** drugs (discard immediately) and drugs **Expiring Soon** ($<30$ days).
+### 3. Advanced ML forecasting & SHAP
+*   **Model Selection**: Automatically trains **Linear Regression**, **Random Forest**, and **XGBoost** models on chronological 80-20 splits. Compares RMSE, MAE, and MAPE metrics, and automatically deploys the best performing model.
+*   **Prediction Intervals**: Computes 95% confidence intervals to generate lower/upper bounds for demand forecasting.
+*   **Explainable AI (XAI)**: Utilizes **SHAP** values to extract exact feature importance percentages, explaining to clinicians why predictions were made (e.g. current rolling sales momentum, season surges, or day of the week).
 
-### 5. 🍂 Seasonal Insights
-* **Epidemiological Analysis:** Outline of Indian disease seasonality (Monsoon fever spikes, Winter cold surges, Summer dehydration spikes).
-* **Grouped Bar Graph:** Plotly chart displaying the average daily usage of medicine categories across different seasons (Monsoon, Winter, Summer).
-* **Seasonal Filter:** Easily filter the database to view high-consumption formulations for a chosen season.
-
-### 6. 📈 Medicine Trends
-* **Overlay Trends Line Graph:** Overlay and compare historical demand timelines for multiple selected formulations simultaneously.
-* **Category Distribution Chart:** A Plotly pie chart highlighting shelf allocation shares across therapeutic categories.
-* **Risk Level Heatmap:** A visual summary count of Green, Yellow, and Red status medicines.
-
-### 7. 📄 Reports & Exports
-* **AI Restocking Recommendation Sheet:** Auto-generates exact order quantities (`30-day forecast + 8-day safety buffer - current stock`) sorted with **Critical Medicines on top**, complete with supplier contacts.
-* **Cost Estimations:** Displays total procurement counts and billing estimates.
-* **Download Buttons:** Download the complete **Inventory Status** or **AI Restocking Sheet** directly as CSV files.
-* **Copyable Clinic Report:** Renders a clean text-based receipt suitable for clinical printouts.
+### 4. Gemini AI Chatbot Assistant
+*   Integrates Google's **Gemini Pro** API.
+*   The assistant parses live database context (current stock shortages, active expiry warnings, reorder suggestions) to contextually answer queries.
 
 ---
 
 ## 🛠️ Step-by-Step Setup Guide
 
-### Step 1: Open project directory
-Ensure all files are placed in your working folder (e.g. `EMBS internship`).
+### Option A: Local Run (SQLite Default)
+Perfect for development and quick testing.
 
-### Step 2: Install dependencies
-Open your terminal or command prompt in the project root directory and execute:
+1.  **Install dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+2.  **Configure environment**:
+    Copy `.env.example` to `.env` and fill in your details (especially `GEMINI_API_KEY` for chatbot assistant).
+3.  **Start FastAPI Backend**:
+    ```bash
+    python -m uvicorn backend.app.main:app --reload
+    ```
+    On launch, the backend automatically runs migrations to initialize a local SQLite file `data/pharmacy_platform.db` and populates it with realistic seed data.
+4.  **Start Streamlit Frontend**:
+    In a new terminal window, run:
+    ```bash
+    streamlit run frontend/streamlit_app.py
+    ```
+    This launches the client UI at `http://localhost:8501`.
+
+### Option B: Docker Compose Run (PostgreSQL + Redis)
+Ideal for production-like environments.
+
+1.  **Configure environment**:
+    Create `.env` file containing your config.
+2.  **Build and launch container group**:
+    ```bash
+    docker-compose up --build
+    ```
+    This launches:
+    *   `PostgreSQL` database container (seeded automatically)
+    *   `Redis` cache container
+    *   `FastAPI` app container on port `8000`
+3.  **Run Streamlit client locally**:
+    ```bash
+    streamlit run frontend/streamlit_app.py
+    ```
+
+---
+
+## 🧪 Testing
+Run the pytest test suite to verify route, auth, inventory, and forecast health:
 ```bash
-pip install -r requirements.txt
+$env:PYTHONPATH="."
+pytest backend/tests/
 ```
-This installs Streamlit, Pandas, NumPy, scikit-learn, and Plotly.
-
-### Step 3: Run the Dashboard App
-Run the Streamlit server:
-```bash
-streamlit run src/app.py
-```
-This will automatically launch the dashboard in your default web browser (typically at `http://localhost:8501`).
-
-*Note: On first startup, the app will automatically invoke `src/data_generator.py` to create the initial CSV datasets inside the `data/` folder. You can also trigger this manually by running `python src/data_generator.py`.*
 
 ---
 
-## 🧠 Explainability: How the AI Works
-
-### 1. The Historical Clinical Database
-* `data/daily_usage_history.csv` simulates 9,150 entries (365 days of transactions for 25 medicines).
-* Monsoonal fevers are simulated with high multipliers for Paracetamol and antibiotics. Winter is simulated with higher cold syrup and Salbutamol inhaler usage. Summer has 3x rehydration salts demand. Metformin and Insulin Glargine remain constant all year.
-
-### 2. Feature Engineering
-In `ml_model.py`, dates are converted to numerical inputs scikit-learn can read:
-- `month` (1 to 12)
-- `day_of_week` (0 to 6)
-- `is_summer`, `is_monsoon`, `is_winter` (binary flags representing seasons)
-- `rolling_avg` (the average usage of the past 7 days, capturing current momentum).
-
-### 3. The Forecasting Models
-* **Linear Regression:** Models linear trends using weighted coefficients:
-  $$\text{Daily Demand} = w_1 \cdot \text{Month} + w_2 \cdot \text{DayOfWeek} + w_3 \cdot \text{Monsoon} + ... + c$$
-  Perfect for showcasing basic seasonal variables in presentations.
-* **Random Forest Regressor:** Combines predictions from multiple decision trees. This is ideal for catching rapid spikes and complex interactions during sudden disease outbreaks.
-
-### 4. Stock-Out Depletion Algorithm
-To locate the exact stock-out date:
-1. The app trains the chosen ML model specifically on the history of the selected medicine.
-2. It forecasts the exact daily demand for each of the next 30 days.
-3. It runs a simulation starting with the current shelf stock and subtracting the predicted usage day-by-day.
-4. The exact date the stock falls to $\le 0$ is flagged as the **Predicted Stock-Out Date**.
+## 🌐 API Documentation
+When the backend server is running, interactive API docs are available at:
+*   **Swagger UI**: `http://localhost:8000/docs`
+*   **ReDoc**: `http://localhost:8000/redoc`
 
 ---
 
-## 🔮 Future Scope
-* **SQLite Backend:** Upgrade from CSV files to a lightweight SQLite database to prevent multi-terminal conflicts.
-* **Automatic SMS Alerts:** Integrate a messaging API (like Twilio) to automatically text local medical distributors when stock level hits the red zone.
-* **Epidemiological Integration:** Syncing dashboard insights with national disease surveillance centers to automatically alert clinics of emerging local epidemics.
+## 🚀 Deployment Instructions
 
----
+### Render
+1.  Create a **PostgreSQL Database** on Render.
+2.  Deploy the backend as a **Web Service**:
+    *   Environment: `Docker`
+    *   Docker Command: `uvicorn backend.app.main:app --host 0.0.0.0 --port 10000`
+    *   Set Env Vars: `DATABASE_URL` (rendered PG URL), `ENV=production`, `JWT_SECRET`, `GEMINI_API_KEY`.
+3.  Deploy the frontend as a **Web Service**:
+    *   Environment: `Python`
+    *   Build Command: `pip install -r requirements.txt`
+    *   Start Command: `streamlit run frontend/streamlit_app.py --server.port $PORT`
+    *   Set Env Var: `BACKEND_URL` to point to the Render backend service URL.
 
-## 🤝 Project Credits
-* Developed for **EMBS Internship Review** and **Beginner Engineering Presentations**.
-* Built using Python, Streamlit, scikit-learn, and Plotly. Fully modular and runnable offline.
+### Google Cloud Run
+1.  Build and push backend image to Google Artifact Registry:
+    ```bash
+    gcloud builds submit --tag gcr.io/your-project/smart-pharmacy-backend backend/
+    ```
+2.  Deploy Backend to Cloud Run:
+    ```bash
+    gcloud run deploy smart-pharmacy-backend --image gcr.io/your-project/smart-pharmacy-backend --platform managed --allow-unauthenticated
+    ```
+3.  Set Env Vars for DB connection and secrets in Google Cloud Console.
